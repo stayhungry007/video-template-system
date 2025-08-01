@@ -1,0 +1,56 @@
+
+
+// import express from 'express';
+// import multer from 'multer';
+// import ffmpeg from 'fluent-ffmpeg';
+// import path from 'path';
+// import fs from 'fs';
+
+// // Initialize Express app
+// const app = express();
+// const port = 3000;
+
+// // Multer setup for video uploads
+// const storage = multer.diskStorage({
+//   destination: function (req, file, cb) {
+//     cb(null, 'uploads/');
+//   },
+//   filename: function (req, file, cb) {
+//     cb(null, Date.now() + path.extname(file.originalname));
+//   },
+// });
+// const upload = multer({ storage: storage });
+
+// // Middleware to serve static files (like video)
+// app.use(express.static('uploads'));
+
+// // Video upload and template creation endpoint
+// app.post('/upload', upload.single('video'), (req, res) => {
+//   if (!req.file) {
+//     return res.status(400).send('No video file uploaded');
+//   }
+
+//   const videoPath = path.join(__dirname, 'uploads', req.file.filename);
+
+//   // Extract video metadata using ffmpeg
+//   ffmpeg.ffprobe(videoPath, (err, metadata) => {
+//     if (err) {
+//       return res.status(500).send('Error processing video');
+//     }
+
+//     // Extract video structure (e.g., resolution, duration, etc.)
+//     const template = {
+//       resolution: `${metadata.streams[0].width}x${metadata.streams[0].height}`,
+//       duration: metadata.format.duration,
+//       codec: metadata.streams[0].codec_name,
+//     };
+
+//     // Store template or return as response
+//     res.json({ message: 'Video uploaded successfully', template });
+//   });
+// });
+
+// // Start server
+// app.listen(port, () => {
+//   console.log(`Server running on http://localhost:${port}`);
+// });

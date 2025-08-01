@@ -1,0 +1,43 @@
+# Node.js
+node_modules/
+
+# TypeScript build output
+dist/
+build/
+
+# Logs
+*.log
+
+# npm
+package-lock.json
+npm-debug.log*
+
+# macOS
+.DS_Store
+
+# Windows
+Thumbs.db
+
+# IDEs and editors
+.vscode/
+.idea/
+
+# Environment files
+.env
+.env.local
+.env.*.local
+
+# Temporary files
+*.swp
+*.swo
+
+# OS generated files
+ehthumbs.db
+Icon?
+Desktop.ini
+
+# Video files (optional, if you don't want to include video uploads)
+uploads/
+
+# TypeScript declaration files (if you don't want to commit them)
+*.d.ts

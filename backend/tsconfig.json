@@ -1,0 +1,19 @@
+{
+    "compilerOptions": {
+      "target": "ES6",               // Compile to ES6
+      "module": "commonjs",          // Use CommonJS module system
+      "outDir": "./dist",            // Output compiled JavaScript to dist/
+      "rootDir": "./backend",        // Specify the root directory for TypeScript files
+      "esModuleInterop": true,       // Enable compatibility with CommonJS modules
+      "strict": true,                // Enable strict type checking
+      "skipLibCheck": true,          // Skip type checking for declaration files
+      "forceConsistentCasingInFileNames": true
+    },
+    "include": [
+      "backend/**/*.ts"
+    ],
+    "exclude": [
+      "node_modules"
+    ]
+}
+  
