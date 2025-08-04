@@ -121,7 +121,7 @@ app.post('/generate', upload.single('video'), async (req, res) => {
         console.log('Video processing finished');
         res.json({
           message: 'Video generated successfully',
-          downloadUrl: `/uploads/generated-${fileName}`,
+          downloadUrl: outputVideoPath,
         });
       })
       .on('error', function(err) {

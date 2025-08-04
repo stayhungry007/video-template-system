@@ -175,7 +175,7 @@ If you encounter any issues while setting up or running the project, here are so
             ```
         - **Windows**
 
-            Download FFmpeg from [FFmpeg official site](https://ffmpeg.org/download.html), extract it, and add the `bin` directory to your system's PATH.
+            Download FFmpeg from [FFmpeg official site](https://ffmpeg.org/download.html), extract it, and add the `bin` directory to your system's PATH. You need to download ffmpeg of full codecs.
 
     After installation, verify FFmpeg by running:
     ```bash
