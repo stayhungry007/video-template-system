@@ -1,45 +1,49 @@
-document.getElementById('videoForm').addEventListener('submit', async function (e) {
+let templateData = {};
+document
+  .getElementById("videoForm")
+  .addEventListener("submit", async function (e) {
     e.preventDefault();
 
     // Get the file input element
-    const videoFileInput = document.getElementById('videoFile');
+    const videoFileInput = document.getElementById("videoFile");
 
     // Check if a file is selected
     if (!videoFileInput.files.length) {
-        alert('Please select a video file to upload.');
-        return; // Stop the form submission if no file is selected
+      alert("Please select a video file to upload.");
+      return; // Stop the form submission if no file is selected
     }
 
     const file = videoFileInput.files[0];
 
     // Validate file type (only allow .mp4 files)
-    if (!file.type.startsWith('video/')) {
-        alert('Please select a valid video file.');
-        return;
+    if (!file.type.startsWith("video/")) {
+      alert("Please select a valid video file.");
+      return;
     }
 
     const maxFileSize = 100 * 1024 * 1024; // 100 MB
     if (file.size > maxFileSize) {
-        alert('File is too large. Please select a file smaller than 100MB.');
-        return;
+      alert("File is too large. Please select a file smaller than 100MB.");
+      return;
     }
 
     const formData = new FormData();
-    formData.append('video', videoFileInput.files[0]);
-  
+    formData.append("video", videoFileInput.files[0]);
+
     try {
-      const response = await fetch('http://localhost:3000/upload', {
-        method: 'POST',
+      const response = await fetch("http://localhost:3000/upload", {
+        method: "POST",
         body: formData,
       });
-  
+
       if (!response.ok) {
         throw new Error(`HTTP error! Status: ${response.status}`);
       }
-  
+
       const result = await response.json();
       if (result.template) {
-        document.getElementById('templateResult').innerHTML = `
+        templateData = result.template;
+        document.getElementById("templateResult").innerHTML = `
           <h2>Generated Template</h2>
           <p>Resolution: ${result.template.resolution}</p>
           <p>Duration: ${result.template.duration} seconds</p>
@@ -54,9 +58,46 @@ document.getElementById('videoForm').addEventListener('submit', async function (
         `;
       }
     } catch (error) {
-      console.error('Error during upload:', error);
-      document.getElementById('templateResult').innerText = 'Failed to generate template';
+      console.error("Error during upload:", error);
+      document.getElementById("templateResult").innerText =
+        "Failed to generate template";
     }
   });
-  
-  
+
+
+document.getElementById('generateForm').addEventListener('submit', async function (e) {
+  e.preventDefault();
+
+  const videoFileInput = document.getElementById('generateFile');
+
+  if (!videoFileInput.files.length) {
+    alert('Please select a video file to generate.');
+    return;
+  }
+  if (!templateData) {
+    alert('Please Template Data to generate.');
+    return;
+  }
+  const formData = new FormData();
+  formData.append('video', videoFileInput.files[0]);
+  formData.append('template', JSON.stringify(templateData));
+
+  try {
+    const response = await fetch('http://localhost:3000/generate', {
+      method: 'POST',
+      body: formData
+    });
+
+    const result = await response.json();
+
+    if (result.downloadUrl) {
+      document.getElementById('templateResult').innerHTML = `
+        <h2>Generated Video</h2>
+        <p><a href="${result.downloadUrl}" download> Download the generated video</a></p>
+      `;
+    }
+  } catch (error) {
+    console.error("Error during video generation", error);
+    document.getElementById('generatedVideoResult').innerText = 'Failed to generate video';
+  }
+});

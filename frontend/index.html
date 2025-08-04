@@ -7,13 +7,37 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <h1>Upload Video to Create Template</h1>
-  <form id="videoForm" enctype="multipart/form-data">
-    <input type="file" name="video" id="videoFile" accept="video/*" />
-    <button type="submit">Upload Video</button>
-  </form>
+  <div class="container">
+    <h1>Video Template Generator</h1>
 
-  <div id="templateResult"></div>
+    <!-- First Upload: Video Template Extraction -->
+    <div class="form-section" id="videoUploadSection">
+      <h2>Step 1: Upload a Video to Extract Template</h2>
+      <form id="videoForm" enctype="multipart/form-data">
+        <input type="file" id="videoFile" name="video" accept="video/*" required>
+        <button type="submit">Upload Video</button>
+      </form>
+    </div>
+
+    <!-- Display the generated template -->
+    <div id="templateResult">
+      <!-- The video template will be displayed here -->
+    </div>
+
+    <!-- Second Upload: Generate Video based on Template -->
+    <div class="form-section" id="videoGenerateSection">
+      <h2>Step 2: Upload a New Video Based on Template</h2>
+      <form id="generateForm" enctype="multipart/form-data">
+        <input type="file" id="generateFile" name="video" accept="video/*" required>
+        <button type="submit">Generate New Video</button>
+      </form>
+    </div>
+
+    <!-- Result after Video Generation -->
+    <div id="generatedVideoResult">
+      <!-- The generated video download link will be displayed here -->
+    </div>
+  </div>
 
   <script src="script.js"></script>
 </body>

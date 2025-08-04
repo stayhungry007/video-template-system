@@ -2,6 +2,7 @@ import express from "express";
 import multer from "multer";
 import path from "path";
 import cors from "cors";
+import ffmpeg from 'fluent-ffmpeg';
 import fs from "fs";
 import { getVideoMetadata } from "./VideoSampleProcessor"; // Importing the function
 import { VideoTemplate, VideoStream, Frame } from "./types/index";
@@ -85,6 +86,54 @@ app.post("/upload", upload.single("video"), async (req, res) => {
   }
 });
 
+
+app.post('/generate', upload.single('video'), async (req, res) => {
+  try {
+    if (!req.file) {
+      return res.status(400).send('No video file uploaded.');
+    }
+
+    const template = JSON.parse(req.body.template);
+
+    if (!template) {
+      return res.status(400).send('Template is required for video generation');
+    }
+
+    const fileName = req.file.filename;
+    const videoPath = path.join(__dirname, 'uploads',fileName);
+    const outputVideoPath = path.join(__dirname, 'uploads', `generated-${fileName}`);
+
+    const resolution = template.resolution;
+
+    if (!resolution || !/^\d+x\d+$/.test(resolution)) {
+      return res.status(400).send('Invalid resolution format');
+    }
+
+    ffmpeg(videoPath)
+      .output(outputVideoPath)
+      .videoCodec(template.codec)  // Set the codec based on the extracted template
+      .size(resolution)   // Set the resolution based on the template
+      .fps(parseInt(template.frameRate))  // Set the frame rate based on the template
+      .audioCodec(template.audioCodec)  // Set the audio codec based on the template
+      .audioChannels(template.audioChannels)  // Set the number of audio channels based on the template
+      .audioFrequency(template.audioSampleRate)  // Set the audio sample rate based on the template
+      .on('end', function() {
+        console.log('Video processing finished');
+        res.json({
+          message: 'Video generated successfully',
+          downloadUrl: `/uploads/generated-${fileName}`,
+        });
+      })
+      .on('error', function(err) {
+        console.log('Error: ' + err.message);
+        res.status(500).json({ message: 'Error processing video', error: err });
+      })
+      .run();
+  } catch (error) {
+    console.error('Error during video processing:', error);
+    res.status(500).json({message: 'Error processing video', error});
+  }
+});
 // Start the server
 app.listen(port, () => {
   console.log(`Server running on http://localhost:${port}`);
